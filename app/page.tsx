@@ -294,7 +294,7 @@ export default function FormularioSIGRH() {
   return (
     <>
       <Header />
-      <div className="container mx-auto py-8">
+      <div className="container mx-auto py-4 px-3 md:py-8 md:px-6">
         <Card className="w-full">
           <CardHeader className="bg-[#006400] text-white">
             <CardTitle className="text-2xl text-center">Formulário de Proposta de Projeto - SIGRH</CardTitle>
@@ -304,13 +304,13 @@ export default function FormularioSIGRH() {
           </CardHeader>
 
           {/* Adicionar os botões de ação no topo */}
-          <div className="p-4 bg-gray-50 border-b flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="p-3 md:p-4 bg-gray-50 border-b flex flex-col md:flex-row justify-between items-center gap-3 md:gap-4">
             <div className="flex items-center">
               <FileText className="h-5 w-5 mr-2 text-[#006400]" />
               <span className="font-medium">Gerenciar Formulário</span>
             </div>
 
-            <div className="flex flex-wrap gap-2 items-center">
+            <div className="flex flex-wrap gap-2 items-center w-full md:w-auto justify-center md:justify-start">
               {/* Botão de exportar PDF */}
               <PDFModal
                 formData={form.getValues()}

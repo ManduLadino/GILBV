@@ -280,7 +280,8 @@ export function Footer({ onFillForm }: FooterProps) {
       {/* Botão flutuante da IA sempre visível */}
       <Button
         onClick={handleToggleChat}
-        className="fixed bottom-4 right-4 rounded-full w-14 h-14 p-0 bg-[#006400] hover:bg-[#008800] shadow-lg z-50"
+        className="fixed bottom-4 right-2 md:right-4 rounded-full w-12 h-12 md:w-14 md:h-14 p-0 bg-[#006400] hover:bg-[#008800] shadow-lg z-50"
+        type="button"
       >
         <Bot size={24} />
       </Button>
@@ -288,8 +289,10 @@ export function Footer({ onFillForm }: FooterProps) {
       {/* Janela de chat da IA */}
       {isOpen && (
         <Card
-          className={`fixed right-4 shadow-lg z-40 transition-all duration-300 ease-in-out ${
-            isMinimized ? "bottom-20 w-60 h-12" : "bottom-20 w-80 md:w-96 h-[500px] max-h-[calc(100vh-120px)]"
+          className={`fixed right-2 md:right-4 shadow-lg z-40 transition-all duration-300 ease-in-out ${
+            isMinimized
+              ? "bottom-20 w-60 h-12"
+              : "bottom-20 w-[calc(100vw-16px)] md:w-80 lg:w-96 h-[500px] max-h-[calc(100vh-120px)]"
           }`}
         >
           <div className="bg-[#006400] text-white p-3 flex justify-between items-center rounded-t-lg">
@@ -304,10 +307,10 @@ export function Footer({ onFillForm }: FooterProps) {
               )}
             </div>
             <div className="flex space-x-2">
-              <button onClick={handleMinimize}>
+              <button onClick={handleMinimize} type="button">
                 {isMinimized ? <Maximize2 size={18} /> : <Minimize2 size={18} />}
               </button>
-              <button onClick={handleToggleChat}>
+              <button onClick={handleToggleChat} type="button">
                 <X size={18} />
               </button>
             </div>
@@ -362,6 +365,7 @@ export function Footer({ onFillForm }: FooterProps) {
                       className="bg-[#006400] hover:bg-[#008800]"
                       onClick={handleAutofill}
                       disabled={isProcessing}
+                      type="button"
                     >
                       {isProcessing ? (
                         <>
@@ -387,6 +391,7 @@ export function Footer({ onFillForm }: FooterProps) {
                     className="text-[#006400] border-[#006400]"
                     onClick={() => fileInputRef.current?.click()}
                     disabled={isUploading}
+                    type="button"
                   >
                     {isUploading ? (
                       <>
