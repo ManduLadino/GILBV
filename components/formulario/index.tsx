@@ -10,6 +10,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import type { UseFormReturn } from "react-hook-form"
 import type { FormValues } from "@/lib/schema"
 
+// Import the Declaracao component directly
+import { Declaracao } from "./declaracao"
+
 // Componente genérico para seções do formulário
 export function FormSection({
   title,
@@ -1096,11 +1099,5 @@ export function CronogramaDesembolso({ form }: { form: UseFormReturn<FormValues>
   )
 }
 
-// E remova todo o código do componente Declaracao que estava neste arquivo
-// (desde "// Componente Declaracao" até o final da função)
-
-// Componente Declaracao
-
-// Remova o componente Declaracao inteiro (a função completa) e mantenha a exportação no final do arquivo:
-
-export { Declaracao } from "./declaracao"
+// Export the Declaracao component directly
+export { Declaracao }
