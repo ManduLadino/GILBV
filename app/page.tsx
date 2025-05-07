@@ -43,6 +43,10 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
 
+// Adicionar importações para o Header e SiteFooter no topo do arquivo
+import { Header } from "@/components/header"
+import { SiteFooter } from "@/components/site-footer"
+
 // Substituir a função FormularioSIGRH por esta versão atualizada
 export default function FormularioSIGRH() {
   const [activeTab, setActiveTab] = useState("dados-gerais")
@@ -281,258 +285,269 @@ export default function FormularioSIGRH() {
     }
   }
 
+  // Modificar o retorno da função FormularioSIGRH para incluir o Header e SiteFooter
+  // Substituir a linha:
+  // return (
+  //   <div className="container mx-auto py-10">
+
+  // Por:
   return (
-    <div className="container mx-auto py-10">
-      <Card className="w-full">
-        <CardHeader className="bg-[#006400] text-white">
-          <CardTitle className="text-2xl text-center">Formulário de Proposta de Projeto - SIGRH</CardTitle>
-          <CardDescription className="text-gray-100 text-center">
-            Preencha todos os campos para submeter sua proposta
-          </CardDescription>
-        </CardHeader>
+    <>
+      <Header />
+      <div className="container mx-auto py-8">
+        <Card className="w-full">
+          <CardHeader className="bg-[#006400] text-white">
+            <CardTitle className="text-2xl text-center">Formulário de Proposta de Projeto - SIGRH</CardTitle>
+            <CardDescription className="text-gray-100 text-center">
+              Preencha todos os campos para submeter sua proposta
+            </CardDescription>
+          </CardHeader>
 
-        {/* Adicionar os botões de ação no topo */}
-        <div className="p-4 bg-gray-50 border-b flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex items-center">
-            <FileText className="h-5 w-5 mr-2 text-[#006400]" />
-            <span className="font-medium">Gerenciar Formulário</span>
+          {/* Adicionar os botões de ação no topo */}
+          <div className="p-4 bg-gray-50 border-b flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="flex items-center">
+              <FileText className="h-5 w-5 mr-2 text-[#006400]" />
+              <span className="font-medium">Gerenciar Formulário</span>
+            </div>
+
+            <div className="flex flex-wrap gap-2 items-center">
+              {/* Botão de exportar PDF */}
+              <PDFModal
+                formData={form.getValues()}
+                references={aiReferences}
+                generationId={generationId}
+                trigger={
+                  <Button variant="outline" className="gap-2">
+                    <Download className="h-4 w-4" />
+                    Exportar PDF
+                  </Button>
+                }
+              />
+
+              {aiReferences.length > 0 && <ReferencesDialog references={aiReferences} generationId={generationId} />}
+
+              <Button
+                variant="outline"
+                className="flex items-center gap-2 border-red-500 text-red-500 hover:bg-red-50"
+                onClick={handleClearForm}
+                disabled={isLoading}
+              >
+                <Trash2 className="h-4 w-4" />
+                Limpar Formulário
+              </Button>
+
+              {/* Dialog para preenchimento com IA */}
+              <Dialog open={isAIDialogOpen} onOpenChange={setIsAIDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button className="flex items-center gap-2 bg-[#006400] hover:bg-[#008800]" disabled={isLoading}>
+                    <Bot className="h-4 w-4" />
+                    Preencher com IA
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Preencher Formulário com IA</DialogTitle>
+                    <DialogDescription>
+                      Especifique o tipo de projeto e o assunto para que a IA possa gerar um conteúdo mais relevante.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="projectType" className="text-right">
+                        Tipo
+                      </Label>
+                      <Select value={projectType} onValueChange={setProjectType} defaultValue="ambiental">
+                        <SelectTrigger className="col-span-3">
+                          <SelectValue placeholder="Selecione o tipo de projeto" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="ambiental">Ambiental</SelectItem>
+                          <SelectItem value="educacional">Educacional</SelectItem>
+                          <SelectItem value="saude">Saúde</SelectItem>
+                          <SelectItem value="infraestrutura">Infraestrutura</SelectItem>
+                          <SelectItem value="cultural">Cultural</SelectItem>
+                          <SelectItem value="social">Social</SelectItem>
+                          <SelectItem value="esporte">Esporte</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="projectTopic" className="text-right">
+                        Assunto
+                      </Label>
+                      <Input
+                        id="projectTopic"
+                        placeholder="Ex: Conservação de nascentes"
+                        className="col-span-3"
+                        value={projectTopic}
+                        onChange={(e) => setProjectTopic(e.target.value)}
+                      />
+                    </div>
+                    <div className="bg-blue-50 p-3 rounded-md flex items-start gap-2">
+                      <div className="mt-1 flex-shrink-0">
+                        <Globe className="h-4 w-4 text-blue-500" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-blue-700">
+                          A IA consultará fontes externas e bases de dados oficiais para gerar o conteúdo mais relevante
+                          e atualizado para o seu projeto.
+                        </p>
+                        <p className="text-sm text-blue-700 mt-1">
+                          Integração com Copilot e outras ferramentas de IA para enriquecer as informações do seu
+                          formulário.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => setIsAIDialogOpen(false)}>
+                      Cancelar
+                    </Button>
+                    <Button
+                      onClick={handleFillFormWithAI}
+                      className="bg-[#006400] hover:bg-[#008800]"
+                      disabled={isLoading}
+                    >
+                      {isLoading ? (
+                        <>
+                          <AlertCircle className="mr-2 h-4 w-4 animate-spin" />
+                          Processando...
+                        </>
+                      ) : (
+                        <>
+                          <Database className="mr-2 h-4 w-4" />
+                          Gerar Conteúdo
+                        </>
+                      )}
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </div>
           </div>
 
-          <div className="flex flex-wrap gap-2 items-center">
-            {/* Botão de exportar PDF */}
-            <PDFModal
-              formData={form.getValues()}
-              references={aiReferences}
-              generationId={generationId}
-              trigger={
-                <Button variant="outline" className="gap-2">
-                  <Download className="h-4 w-4" />
-                  Exportar PDF
-                </Button>
-              }
-            />
+          {isLoading && (
+            <div className="p-4">
+              <Alert>
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Processando</AlertTitle>
+                <AlertDescription>Aguarde enquanto processamos sua solicitação...</AlertDescription>
+              </Alert>
+            </div>
+          )}
 
-            {aiReferences.length > 0 && <ReferencesDialog references={aiReferences} generationId={generationId} />}
-
-            <Button
-              variant="outline"
-              className="flex items-center gap-2 border-red-500 text-red-500 hover:bg-red-50"
-              onClick={handleClearForm}
-              disabled={isLoading}
-            >
-              <Trash2 className="h-4 w-4" />
-              Limpar Formulário
-            </Button>
-
-            {/* Dialog para preenchimento com IA */}
-            <Dialog open={isAIDialogOpen} onOpenChange={setIsAIDialogOpen}>
-              <DialogTrigger asChild>
-                <Button className="flex items-center gap-2 bg-[#006400] hover:bg-[#008800]" disabled={isLoading}>
-                  <Bot className="h-4 w-4" />
-                  Preencher com IA
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle>Preencher Formulário com IA</DialogTitle>
-                  <DialogDescription>
-                    Especifique o tipo de projeto e o assunto para que a IA possa gerar um conteúdo mais relevante.
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="grid gap-4 py-4">
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="projectType" className="text-right">
-                      Tipo
-                    </Label>
-                    <Select value={projectType} onValueChange={setProjectType} defaultValue="ambiental">
-                      <SelectTrigger className="col-span-3">
-                        <SelectValue placeholder="Selecione o tipo de projeto" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="ambiental">Ambiental</SelectItem>
-                        <SelectItem value="educacional">Educacional</SelectItem>
-                        <SelectItem value="saude">Saúde</SelectItem>
-                        <SelectItem value="infraestrutura">Infraestrutura</SelectItem>
-                        <SelectItem value="cultural">Cultural</SelectItem>
-                        <SelectItem value="social">Social</SelectItem>
-                        <SelectItem value="esporte">Esporte</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="projectTopic" className="text-right">
-                      Assunto
-                    </Label>
-                    <Input
-                      id="projectTopic"
-                      placeholder="Ex: Conservação de nascentes"
-                      className="col-span-3"
-                      value={projectTopic}
-                      onChange={(e) => setProjectTopic(e.target.value)}
-                    />
-                  </div>
-                  <div className="bg-blue-50 p-3 rounded-md flex items-start gap-2">
-                    <div className="mt-1 flex-shrink-0">
-                      <Globe className="h-4 w-4 text-blue-500" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-blue-700">
-                        A IA consultará fontes externas e bases de dados oficiais para gerar o conteúdo mais relevante e
-                        atualizado para o seu projeto.
-                      </p>
-                      <p className="text-sm text-blue-700 mt-1">
-                        Integração com Copilot e outras ferramentas de IA para enriquecer as informações do seu
-                        formulário.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <DialogFooter>
-                  <Button variant="outline" onClick={() => setIsAIDialogOpen(false)}>
-                    Cancelar
-                  </Button>
+          {aiReferences.length > 0 && (
+            <div className="p-4 bg-blue-50">
+              <Alert variant="default" className="bg-blue-50 border-blue-200">
+                <BookOpen className="h-4 w-4 text-blue-500" />
+                <AlertTitle className="text-blue-700">Conteúdo gerado por IA</AlertTitle>
+                <AlertDescription className="text-blue-600">
+                  Este formulário contém conteúdo gerado automaticamente. Verifique as informações e ajuste conforme
+                  necessário.
                   <Button
-                    onClick={handleFillFormWithAI}
-                    className="bg-[#006400] hover:bg-[#008800]"
-                    disabled={isLoading}
+                    variant="link"
+                    className="text-blue-700 p-0 h-auto font-normal"
+                    onClick={() =>
+                      document
+                        .querySelector('[aria-label="Ver Referências"]')
+                        ?.dispatchEvent(new MouseEvent("click", { bubbles: true }))
+                    }
                   >
-                    {isLoading ? (
-                      <>
-                        <AlertCircle className="mr-2 h-4 w-4 animate-spin" />
-                        Processando...
-                      </>
-                    ) : (
-                      <>
-                        <Database className="mr-2 h-4 w-4" />
-                        Gerar Conteúdo
-                      </>
-                    )}
+                    Ver referências utilizadas.
                   </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-          </div>
-        </div>
+                </AlertDescription>
+              </Alert>
+            </div>
+          )}
 
-        {isLoading && (
-          <div className="p-4">
-            <Alert>
-              <AlertCircle className="h-4 w-4" />
-              <AlertTitle>Processando</AlertTitle>
-              <AlertDescription>Aguarde enquanto processamos sua solicitação...</AlertDescription>
-            </Alert>
-          </div>
-        )}
+          <CardContent className="p-6">
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                  <TabsList className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 mb-4">
+                    {tabs.map((tab) => (
+                      <TabsTrigger key={tab.id} value={tab.id} className="text-xs md:text-sm">
+                        {tab.label}
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
 
-        {aiReferences.length > 0 && (
-          <div className="p-4 bg-blue-50">
-            <Alert variant="default" className="bg-blue-50 border-blue-200">
-              <BookOpen className="h-4 w-4 text-blue-500" />
-              <AlertTitle className="text-blue-700">Conteúdo gerado por IA</AlertTitle>
-              <AlertDescription className="text-blue-600">
-                Este formulário contém conteúdo gerado automaticamente. Verifique as informações e ajuste conforme
-                necessário.
-                <Button
-                  variant="link"
-                  className="text-blue-700 p-0 h-auto font-normal"
-                  onClick={() =>
-                    document
-                      .querySelector('[aria-label="Ver Referências"]')
-                      ?.dispatchEvent(new MouseEvent("click", { bubbles: true }))
-                  }
-                >
-                  Ver referências utilizadas.
-                </Button>
-              </AlertDescription>
-            </Alert>
-          </div>
-        )}
+                  <TabsContent value="dados-gerais">
+                    <DadosGerais form={form} />
+                  </TabsContent>
 
-        <CardContent className="p-6">
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                <TabsList className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 mb-4">
-                  {tabs.map((tab) => (
-                    <TabsTrigger key={tab.id} value={tab.id} className="text-xs md:text-sm">
-                      {tab.label}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
+                  <TabsContent value="responsavel-legal">
+                    <ResponsavelLegal form={form} />
+                  </TabsContent>
 
-                <TabsContent value="dados-gerais">
-                  <DadosGerais form={form} />
-                </TabsContent>
+                  <TabsContent value="responsavel-tecnico">
+                    <ResponsavelTecnico form={form} />
+                  </TabsContent>
 
-                <TabsContent value="responsavel-legal">
-                  <ResponsavelLegal form={form} />
-                </TabsContent>
+                  <TabsContent value="outros-participes">
+                    <OutrosParticipes form={form} />
+                  </TabsContent>
 
-                <TabsContent value="responsavel-tecnico">
-                  <ResponsavelTecnico form={form} />
-                </TabsContent>
+                  <TabsContent value="descricao-realidade">
+                    <DescricaoRealidade form={form} />
+                  </TabsContent>
 
-                <TabsContent value="outros-participes">
-                  <OutrosParticipes form={form} />
-                </TabsContent>
+                  <TabsContent value="sintese-propostas">
+                    <SintesePropostas form={form} />
+                  </TabsContent>
 
-                <TabsContent value="descricao-realidade">
-                  <DescricaoRealidade form={form} />
-                </TabsContent>
+                  <TabsContent value="capacidade-instalada">
+                    <CapacidadeInstalada form={form} />
+                  </TabsContent>
 
-                <TabsContent value="sintese-propostas">
-                  <SintesePropostas form={form} />
-                </TabsContent>
+                  <TabsContent value="sustentabilidade">
+                    <Sustentabilidade form={form} />
+                  </TabsContent>
 
-                <TabsContent value="capacidade-instalada">
-                  <CapacidadeInstalada form={form} />
-                </TabsContent>
+                  <TabsContent value="cronograma-fisico">
+                    <CronogramaFisico form={form} />
+                  </TabsContent>
 
-                <TabsContent value="sustentabilidade">
-                  <Sustentabilidade form={form} />
-                </TabsContent>
+                  <TabsContent value="recursos-financeiros">
+                    <RecursosFinanceiros form={form} />
+                  </TabsContent>
 
-                <TabsContent value="cronograma-fisico">
-                  <CronogramaFisico form={form} />
-                </TabsContent>
+                  <TabsContent value="cronograma-desembolso">
+                    <CronogramaDesembolso form={form} />
+                  </TabsContent>
 
-                <TabsContent value="recursos-financeiros">
-                  <RecursosFinanceiros form={form} />
-                </TabsContent>
+                  <TabsContent value="declaracao">
+                    <Declaracao form={form} />
+                  </TabsContent>
+                </Tabs>
 
-                <TabsContent value="cronograma-desembolso">
-                  <CronogramaDesembolso form={form} />
-                </TabsContent>
-
-                <TabsContent value="declaracao">
-                  <Declaracao form={form} />
-                </TabsContent>
-              </Tabs>
-
-              <CardFooter className="flex justify-between px-0">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={handlePrevious}
-                  disabled={activeTab === "dados-gerais"}
-                >
-                  Anterior
-                </Button>
-
-                {activeTab === "declaracao" ? (
-                  <Button type="submit">Enviar Proposta</Button>
-                ) : (
-                  <Button type="button" onClick={handleNext}>
-                    Próximo
+                <CardFooter className="flex justify-between px-0">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handlePrevious}
+                    disabled={activeTab === "dados-gerais"}
+                  >
+                    Anterior
                   </Button>
-                )}
-              </CardFooter>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
-      {/* Componente do Rodapé com IA */}
-      <Footer onFillForm={handleFormFill} />
-    </div>
+
+                  {activeTab === "declaracao" ? (
+                    <Button type="submit">Enviar Proposta</Button>
+                  ) : (
+                    <Button type="button" onClick={handleNext}>
+                      Próximo
+                    </Button>
+                  )}
+                </CardFooter>
+              </form>
+            </Form>
+          </CardContent>
+        </Card>
+        {/* Componente do Rodapé com IA */}
+        <Footer onFillForm={handleFormFill} />
+      </div>
+      {/* E no final do componente, antes do último parêntese de fechamento, adicionar: */}
+      <SiteFooter />
+    </>
   )
 }
