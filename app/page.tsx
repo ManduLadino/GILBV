@@ -355,6 +355,7 @@ export default function FormularioSIGRH() {
                         <SelectItem value="infraestrutura">Infraestrutura</SelectItem>
                         <SelectItem value="cultural">Cultural</SelectItem>
                         <SelectItem value="social">Social</SelectItem>
+                        <SelectItem value="esporte">Esporte</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>

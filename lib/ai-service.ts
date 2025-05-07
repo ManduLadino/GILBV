@@ -1,7 +1,7 @@
 // Serviço simulado de IA para geração de conteúdo e processamento de documentos
 
 // Tipos de projetos que a IA pode gerar
-export type ProjectType = "ambiental" | "educacional" | "saude" | "infraestrutura" | "cultural" | "social"
+export type ProjectType = "ambiental" | "educacional" | "saude" | "infraestrutura" | "cultural" | "social" | "esporte"
 
 // Interface para as referências
 export interface Reference {
@@ -115,6 +115,26 @@ const referenceDatabase: Record<ProjectType, Reference[]> = {
       date: "2023-04-20",
     },
   ],
+  esporte: [
+    {
+      title: "Plano Estadual de Esporte e Lazer do Piauí",
+      url: "https://www.esporte.pi.gov.br/plano-estadual-esporte",
+      description: "Diretrizes e metas para o desenvolvimento do esporte no estado",
+      date: "2022-03-10",
+    },
+    {
+      title: "Mapeamento de Instalações Esportivas do Piauí",
+      url: "https://www.esporte.pi.gov.br/instalacoes-esportivas",
+      description: "Levantamento das instalações esportivas disponíveis no estado",
+      date: "2023-01-25",
+    },
+    {
+      title: "Relatório de Projetos Esportivos Financiados",
+      url: "https://www.esporte.pi.gov.br/projetos-financiados",
+      description: "Análise dos projetos esportivos financiados pelo estado nos últimos anos",
+      date: "2022-11-15",
+    },
+  ],
 }
 
 // Função para gerar nomes de organizações aleatórias
@@ -128,6 +148,7 @@ function generateOrganizationName(type: ProjectType): string {
     infraestrutura: ["de Desenvolvimento Urbano", "de Infraestrutura", "de Obras", "de Engenharia"],
     cultural: ["Cultural", "de Cultura", "de Arte", "de Patrimônio Cultural"],
     social: ["de Assistência Social", "de Desenvolvimento Social", "Comunitário", "de Apoio Social"],
+    esporte: ["Esportivo", "de Esporte e Lazer", "de Desenvolvimento Esportivo", "de Formação Atlética"],
   }
 
   const suffixes = [
@@ -382,6 +403,77 @@ function generateEnvironmentalProject(): any {
   }
 }
 
+// Adicionar função para gerar projeto esportivo
+function generateSportsProject(): any {
+  const organizationName = generateOrganizationName("esporte")
+  const responsavelLegalName = generatePersonName()
+  const responsavelTecnicoName = generatePersonName()
+
+  return {
+    dadosGerais: {
+      nome: organizationName,
+      cnpj: generateCNPJ(),
+      endereco: generateAddress(),
+      bairro: "Centro",
+      cep: generateCEP(),
+      telefones: generatePhone(),
+      email: generateEmail(organizationName),
+      cidade: "Teresina",
+      uf: "PI",
+    },
+    responsavelLegal: {
+      nome: responsavelLegalName,
+      cpf: generateCPF(),
+      rg: `${Math.floor(Math.random() * 10000000)} SSP/PI`,
+      cargo: "Presidente",
+      endereco: generateAddress(),
+      cep: generateCEP(),
+      bairro: "Centro",
+      telefones: generatePhone(),
+      email: generateEmail(responsavelLegalName),
+      cidade: "Teresina",
+      uf: "PI",
+    },
+    responsavelTecnico: {
+      nome: responsavelTecnicoName,
+      areaFormacao: "Educação Física",
+      registroConselho: `CREF-PI ${Math.floor(Math.random() * 100000)}`,
+      endereco: generateAddress(),
+      cep: generateCEP(),
+      bairro: "Centro",
+      telefone: generatePhone(),
+      email: generateEmail(responsavelTecnicoName),
+      cidade: "Teresina",
+      uf: "PI",
+    },
+    outrosParticipes: {
+      nome: "Secretaria Estadual de Esporte e Lazer do Piauí",
+      cgcCpf: generateCNPJ(),
+      endereco: "Av. Pedro Freitas, s/n, Centro Administrativo",
+      cep: "64018-900",
+    },
+    descricaoRealidade: {
+      historicoOrganizacao: `${organizationName} foi fundada em ${2000 + Math.floor(Math.random() * 20)} com o objetivo de promover a prática esportiva e o desenvolvimento de atletas no estado do Piauí. Ao longo dos anos, a organização tem trabalhado em parceria com comunidades locais, poder público e iniciativa privada para implementar projetos que democratizam o acesso ao esporte e descobrem novos talentos.`,
+      projetosAnteriores: `Projeto Esporte para Todos (${2018 + Math.floor(Math.random() * 5)}-${2020 + Math.floor(Math.random() * 3)}): Iniciação esportiva em ${5 + Math.floor(Math.random() * 10)} modalidades diferentes, beneficiando ${200 + Math.floor(Math.random() * 300)} crianças e adolescentes.\n\nCampeonato Interescolar (${2019 + Math.floor(Math.random() * 4)}-${2021 + Math.floor(Math.random() * 3)}): Competição entre ${15 + Math.floor(Math.random() * 20)} escolas públicas de Teresina e região metropolitana.\n\nFormação de Atletas (${2020 + Math.floor(Math.random() * 3)}): Treinamento especializado para ${50 + Math.floor(Math.random() * 100)} jovens atletas em modalidades olímpicas.`,
+      parceriasExistentes: `Secretaria Estadual de Esporte e Lazer do Piauí: Apoio técnico e financeiro para projetos esportivos.\n\nUniversidade Federal do Piauí: Parceria para avaliação física e acompanhamento de atletas.\n\nComitê Olímpico Brasileiro: Suporte metodológico para formação de atletas de alto rendimento.`,
+      informacoesConvenios: `Convênio nº ${Math.floor(Math.random() * 100)}/2019 - SEMEL-PI: Projeto de Iniciação Esportiva em Comunidades Vulneráveis, valor R$ ${150000 + Math.floor(Math.random() * 100000)},00, concluído com êxito em 2021.\n\nConvênio nº ${Math.floor(Math.random() * 100)}/2020 - Ministério do Esporte: Programa de Formação de Atletas, valor R$ ${200000 + Math.floor(Math.random() * 150000)},00, concluído com aprovação total da prestação de contas.`,
+    },
+    sintesePropostas: {
+      areaConcorrencia: "area1",
+      titulo: "Desenvolvimento Esportivo e Formação de Atletas em Comunidades Ribeirinhas",
+      objeto: `O projeto visa promover o desenvolvimento esportivo e a formação de atletas em ${5 + Math.floor(Math.random() * 10)} comunidades ribeirinhas do Piauí, através da implementação de núcleos esportivos, capacitação de professores locais e realização de competições regionais, utilizando os recursos hídricos da região como diferencial para modalidades aquáticas.`,
+      justificativa: `As comunidades ribeirinhas do Piauí possuem grande potencial para o desenvolvimento de atletas em modalidades aquáticas, mas carecem de infraestrutura e orientação técnica adequada. O projeto busca aproveitar os recursos hídricos naturais da região para promover a prática esportiva, melhorar a qualidade de vida da população local e identificar talentos esportivos, contribuindo para o desenvolvimento sustentável dessas comunidades através do esporte.`,
+      abrangencia: `${5 + Math.floor(Math.random() * 10)} comunidades ribeirinhas nos municípios de Parnaíba, Luís Correia e Ilha Grande`,
+      publicoBeneficiario: `${300 + Math.floor(Math.random() * 500)} crianças e adolescentes entre 7 e 17 anos e suas famílias`,
+      metaAtendimento: `${1000 + Math.floor(Math.random() * 2000)} pessoas diretamente beneficiadas e ${3000 + Math.floor(Math.random() * 5000)} indiretamente`,
+      periodoInicio: generateDate(2025, 2026),
+      periodoTermino: generateDate(2026, 2027),
+      metodologia: `O projeto será desenvolvido em três etapas principais:\n\n1. Diagnóstico e mobilização: Mapeamento das comunidades, identificação de espaços para prática esportiva e mobilização da população local.\n\n2. Implementação dos núcleos: Estruturação dos espaços, aquisição de equipamentos e capacitação de professores e monitores locais.\n\n3. Desenvolvimento esportivo: Realização de aulas regulares, festivais e competições, com acompanhamento técnico e avaliação periódica dos participantes.`,
+    },
+    // Outros campos seriam preenchidos de forma semelhante
+  }
+}
+
 // Atualizar a função generateProjectContent para aceitar um parâmetro de assunto
 export async function generateProjectContent(
   projectType: ProjectType = "ambiental",
@@ -421,6 +513,9 @@ export async function generateProjectContent(
     case "ambiental":
       content = generateEnvironmentalProject()
       break
+    case "esporte":
+      content = generateSportsProject()
+      break
     // Outros tipos de projetos seriam implementados de forma semelhante
     default:
       content = generateEnvironmentalProject() // Fallback para ambiental
@@ -443,15 +538,33 @@ export async function generateProjectContent(
   }
 }
 
-// Função para processar um documento enviado
+// Atualizar a função processDocument para melhorar o processamento de PDFs
 export async function processDocument(file: File): Promise<AIGenerationResult> {
-  // Simula o tempo de processamento do documento
-  await new Promise((resolve) => setTimeout(resolve, 2000))
+  // Verifica se é um PDF
+  const isPDF = file.type === "application/pdf"
+
+  // Simula o tempo de processamento do documento (mais longo para PDFs)
+  await new Promise((resolve) => setTimeout(resolve, isPDF ? 3000 : 2000))
 
   // Como não podemos realmente processar o documento, geramos conteúdo aleatório
   // Em um caso real, aqui seria feita a análise do documento
   const projectType: ProjectType = "ambiental"
-  const selectedReferences = referenceDatabase[projectType].slice(0, 2 + Math.floor(Math.random() * 2))
+
+  // Para PDFs, criamos uma referência específica para o arquivo
+  let selectedReferences = referenceDatabase[projectType].slice(0, 2 + Math.floor(Math.random() * 2))
+
+  if (isPDF) {
+    // Adiciona o próprio PDF como referência principal
+    const pdfReference: Reference = {
+      title: `Documento: ${file.name}`,
+      url: "#", // Em um caso real, seria o URL do documento armazenado
+      description: "Documento PDF fornecido pelo usuário como fonte principal de informações",
+      date: new Date().toISOString().split("T")[0],
+    }
+
+    // Coloca o PDF como primeira referência
+    selectedReferences = [pdfReference, ...selectedReferences]
+  }
 
   return {
     content: generateEnvironmentalProject(),
@@ -478,6 +591,8 @@ export async function searchSimilarProjects(query: string): Promise<AIGeneration
     projectType = "cultural"
   } else if (query.toLowerCase().includes("social") || query.toLowerCase().includes("assistencia")) {
     projectType = "social"
+  } else if (query.toLowerCase().includes("esporte") || query.toLowerCase().includes("atleta")) {
+    projectType = "esporte"
   }
 
   // Seleciona referências relevantes
@@ -488,6 +603,9 @@ export async function searchSimilarProjects(query: string): Promise<AIGeneration
   switch (projectType) {
     case "ambiental":
       content = generateEnvironmentalProject()
+      break
+    case "esporte":
+      content = generateSportsProject()
       break
     // Outros tipos de projetos seriam implementados de forma semelhante
     default:

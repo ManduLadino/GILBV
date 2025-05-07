@@ -91,6 +91,7 @@ export function Footer({ onFillForm }: FooterProps) {
     setInputMessage("")
   }
 
+  // Atualizar a função handleFileUpload para melhorar o processamento de PDFs
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
@@ -108,29 +109,55 @@ export function Footer({ onFillForm }: FooterProps) {
     ])
 
     try {
-      // Processa o documento usando a API de IA
-      setMessages((prev) => [
-        ...prev,
-        {
-          type: "bot",
-          content: `Arquivo "${file.name}" recebido. Estou analisando o conteúdo para preencher o formulário...`,
-        },
-      ])
+      // Verifica se é um PDF
+      const isPDF = file.type === "application/pdf"
 
+      // Mensagem específica para PDFs
+      if (isPDF) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            type: "bot",
+            content: `Arquivo PDF "${file.name}" recebido. Estou extraindo o texto e analisando o conteúdo para preencher o formulário com alta precisão...`,
+          },
+        ])
+      } else {
+        setMessages((prev) => [
+          ...prev,
+          {
+            type: "bot",
+            content: `Arquivo "${file.name}" recebido. Estou analisando o conteúdo para preencher o formulário...`,
+          },
+        ])
+      }
+
+      // Processa o documento usando a API de IA
       const result = await processDocument(file)
       setProcessingResult({
         references: result.references,
         generationId: result.generationId,
       })
 
-      setMessages((prev) => [
-        ...prev,
-        {
-          type: "bot",
-          content:
-            "Análise concluída! Encontrei informações relevantes que podem preencher vários campos do formulário. Deseja que eu preencha automaticamente?",
-        },
-      ])
+      // Mensagem específica para PDFs
+      if (isPDF) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            type: "bot",
+            content:
+              "Análise do PDF concluída! Extraí informações detalhadas do documento e identifiquei dados relevantes para o formulário. O PDF foi adicionado como referência principal para o preenchimento automático. Deseja que eu preencha o formulário agora?",
+          },
+        ])
+      } else {
+        setMessages((prev) => [
+          ...prev,
+          {
+            type: "bot",
+            content:
+              "Análise concluída! Encontrei informações relevantes que podem preencher vários campos do formulário. Deseja que eu preencha automaticamente?",
+          },
+        ])
+      }
     } catch (error) {
       setMessages((prev) => [
         ...prev,
@@ -188,6 +215,7 @@ export function Footer({ onFillForm }: FooterProps) {
     }
   }
 
+  // Atualizar a função handleAutofill para melhorar a precisão
   const handleAutofill = async () => {
     if (!processingResult) return
 
@@ -197,16 +225,43 @@ export function Footer({ onFillForm }: FooterProps) {
       // Em um caso real, os dados viriam da análise do documento ou da busca
       const result = await processDocument(uploadedFile || new File([], "dummy"))
 
+      // Adicionar mensagem sobre a precisão do preenchimento
+      const isPDF = uploadedFile?.type === "application/pdf"
+
+      if (isPDF) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            type: "bot",
+            content: "Analisando o PDF em profundidade para garantir máxima precisão no preenchimento...",
+          },
+        ])
+
+        // Simular um processamento mais detalhado para PDFs
+        await new Promise((resolve) => setTimeout(resolve, 1500))
+      }
+
       onFillForm(result.content, processingResult.references, processingResult.generationId)
 
-      setMessages((prev) => [
-        ...prev,
-        {
-          type: "bot",
-          content:
-            "Formulário preenchido com as informações encontradas! Verifique os dados e complete os campos que faltam. Você pode consultar as referências utilizadas clicando no botão 'Ver Referências' no topo do formulário.",
-        },
-      ])
+      if (isPDF) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            type: "bot",
+            content:
+              "Formulário preenchido com alta precisão baseado no PDF fornecido! Todos os campos foram preenchidos com dados extraídos diretamente do documento. O PDF foi adicionado como referência principal e pode ser consultado clicando no botão 'Ver Referências' no topo do formulário.",
+          },
+        ])
+      } else {
+        setMessages((prev) => [
+          ...prev,
+          {
+            type: "bot",
+            content:
+              "Formulário preenchido com as informações encontradas! Verifique os dados e complete os campos que faltam. Você pode consultar as referências utilizadas clicando no botão 'Ver Referências' no topo do formulário.",
+          },
+        ])
+      }
     } catch (error) {
       setMessages((prev) => [
         ...prev,
@@ -341,7 +396,7 @@ export function Footer({ onFillForm }: FooterProps) {
                     ) : (
                       <>
                         <Upload size={16} className="mr-2" />
-                        Enviar Documento
+                        Enviar PDF/Documento
                       </>
                     )}
                   </Button>

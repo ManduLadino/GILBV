@@ -51,21 +51,34 @@ export function ReferencesDialog({ references, generationId }: ReferencesDialogP
           <ScrollArea className="h-[300px] rounded-md border p-4">
             <div className="space-y-4">
               {references.map((reference, index) => (
-                <div key={index} className="border-b pb-3 last:border-0">
-                  <h3 className="font-medium">{reference.title}</h3>
+                <div
+                  key={index}
+                  className={`border-b pb-3 last:border-0 ${reference.title.startsWith("Documento: ") ? "bg-blue-50 p-3 rounded-md" : ""}`}
+                >
+                  <h3 className="font-medium flex items-center gap-2">
+                    {reference.title.startsWith("Documento: ") && <FileText className="h-4 w-4 text-blue-500" />}
+                    {reference.title}
+                    {reference.title.startsWith("Documento: ") && (
+                      <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">PDF Importado</span>
+                    )}
+                  </h3>
                   <p className="text-sm text-muted-foreground mb-2">{reference.description}</p>
                   <div className="flex justify-between items-center text-xs">
                     <span className="text-muted-foreground">
                       Data: {new Date(reference.date).toLocaleDateString("pt-BR")}
                     </span>
-                    <a
-                      href={reference.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-1 text-[#006400] hover:underline"
-                    >
-                      Acessar <ExternalLink className="h-3 w-3" />
-                    </a>
+                    {reference.url !== "#" ? (
+                      <a
+                        href={reference.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1 text-[#006400] hover:underline"
+                      >
+                        Acessar <ExternalLink className="h-3 w-3" />
+                      </a>
+                    ) : (
+                      <span className="text-blue-600">Documento local</span>
+                    )}
                   </div>
                 </div>
               ))}
