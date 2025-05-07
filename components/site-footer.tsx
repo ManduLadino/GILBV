@@ -33,14 +33,16 @@ export function SiteFooter() {
   return (
     <footer className="bg-gray-50 border-t py-10 mt-12">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Coluna 1: Logo e Gil Ferreira */}
           <div>
             <Image
               src="/images/logo-mp2ia.png"
               alt="MP2 IA Logo"
-              width={160}
-              height={64}
-              className="h-14 w-auto mb-5"
+              width={180}
+              height={72}
+              className="h-auto w-40 mb-5"
+              style={{ objectFit: "contain" }}
             />
             <div className="text-sm text-gray-600 space-y-1">
               <p className="font-semibold">Gil Ferreira</p>
@@ -62,6 +64,7 @@ export function SiteFooter() {
             </div>
           </div>
 
+          {/* Coluna 2: Fundação Primeira Potência */}
           <div className="text-sm text-gray-600">
             <h3 className="font-semibold mb-2">Fundação Primeira Potência</h3>
             <div className="space-y-1">
@@ -89,6 +92,50 @@ export function SiteFooter() {
                   <SocialIcon href={SOCIAL_LINKS.fundacao.linkedin} icon={Linkedin} label="LinkedIn da Fundação" />
                   <SocialIcon href={SOCIAL_LINKS.fundacao.twitter} icon={Twitter} label="X (Twitter) da Fundação" />
                   <SocialIcon href={SOCIAL_LINKS.fundacao.whatsapp} icon={MessageSquare} label="WhatsApp da Fundação" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Coluna 3: Mandu Ladino (Parceiro) */}
+          <div className="text-sm text-gray-600">
+            <h3 className="font-semibold mb-2">Parceiro: Mandu Ladino</h3>
+            <div className="space-y-1">
+              <p>Consultoria em Projetos e Inovação</p>
+              <p>CNPJ: 12.345.678/0001-90</p>
+              <p>Endereço: Av. Frei Serafim, 2280, Centro, Teresina - PI</p>
+              <p>
+                E-mail:{" "}
+                <a href="mailto:contato@manduladino.com.br" className="text-[#006400] hover:underline">
+                  contato@manduladino.com.br
+                </a>
+              </p>
+              <p>
+                Telefone:{" "}
+                <a href="tel:+558632230000" className="text-[#006400] hover:underline">
+                  (86) 3223-0000
+                </a>
+              </p>
+
+              <div className="mt-2">
+                <p className="mb-1">Redes Sociais:</p>
+                <div className="flex space-x-3">
+                  <SocialIcon
+                    href="https://www.instagram.com/manduladino/"
+                    icon={Instagram}
+                    label="Instagram Mandu Ladino"
+                  />
+                  <SocialIcon
+                    href="https://www.facebook.com/manduladino/"
+                    icon={Facebook}
+                    label="Facebook Mandu Ladino"
+                  />
+                  <SocialIcon
+                    href="https://www.linkedin.com/company/manduladino/"
+                    icon={Linkedin}
+                    label="LinkedIn Mandu Ladino"
+                  />
+                  <SocialIcon href="https://wa.me/5586999999999" icon={MessageSquare} label="WhatsApp Mandu Ladino" />
                 </div>
               </div>
             </div>

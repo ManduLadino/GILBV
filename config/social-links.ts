@@ -17,4 +17,11 @@ export const SOCIAL_LINKS = {
     twitter: "https://twitter.com/potenciapiaui", // Substitua pelo perfil real
     site: "https://www.potenciapiaui.com", // Site oficial
   },
+  manduLadino: {
+    whatsapp: "https://wa.me/5586999999999", // Substitua pelo número real
+    instagram: "https://www.instagram.com/manduladino/", // Substitua pelo perfil real
+    facebook: "https://www.facebook.com/manduladino/", // Substitua pelo perfil real
+    linkedin: "https://www.linkedin.com/company/manduladino/", // Substitua pelo perfil real
+    site: "https://www.manduladino.com.br", // Substitua pelo site real
+  },
 }

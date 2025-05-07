@@ -11,10 +11,11 @@ export function Header() {
           <Image
             src="/images/logo-mp2ia.png"
             alt="MP2 IA Logo"
-            width={180}
-            height={72}
-            className="h-16 w-auto"
+            width={200}
+            height={80}
+            className="h-auto w-48"
             priority
+            style={{ objectFit: "contain" }}
           />
         </Link>
       </div>
